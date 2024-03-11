@@ -24,24 +24,69 @@ class TCPClient {
                     new BufferedReader(new
                             InputStreamReader(clientSocket.getInputStream()));
 
+            Scanner scanner = new Scanner(System.in);
+            int input ;
+
             while (true) {
 
-                System.out.println("plz insert id");
-                String id = inFromUser.nextLine();
+                String sendToServer = "";
+                System.out.println("plz press 1 to Add new person ");
+                System.out.println("plz press 2 for Searching a person ");
+                System.out.println("plz press 3 for Delete person");
+                System.out.println("plz press 4 for Update person");
 
-                System.out.println("plz insert name");
-                String name = inFromUser.nextLine();
+                input = scanner.nextInt();
+                sendToServer += input + "-";
 
-                System.out.println("plz insert phone");
-                String phone = inFromUser.nextLine();
+                if (input ==1 || input == 4){
 
-                Student s = new Student(id, name, phone);
+                    System.out.println("plz insert id");
+                    String id = inFromUser.nextLine();
 
-                outToServer.writeObject(s); // send all the student object
+                    System.out.println("plz insert name");
+                    String name = inFromUser.nextLine();
+
+                    System.out.println("plz insert phone");
+                    String phone = inFromUser.nextLine();
+
+                    System.out.println("plz insert password");
+                    String password = inFromUser.nextLine();
+
+                    sendToServer+=id+"-"+name+"-"+phone+"-"+password;
+
+                    //איך נשתמש בפונקציית SQL?
+                    if (input == 1){
+                        System.out.println("Successfully added person");
+                    }else {
+                        System.out.println("Update Successfully");
+                    }
+
+                } else if (input == 2) {
+                    System.out.println("plz insert id");
+                    String id = inFromUser.nextLine();
+
+                    sendToServer+=id;
+
+
+
+                } else if (input == 3) {
+                    System.out.println("plz insert id");
+                    String id = inFromUser.nextLine();
+                    sendToServer+=id;
+
+
+                    System.out.println("Delete Successfully");
+                }
+
+//                System.out.println("123456789*hila*0543041603*G66");
+                //Student s = new Student(id, name, phone);
+                outToServer.writeObject(sendToServer); // send all the student object
 
                 modifiedSentence = inFromServer.readLine();
 
                 System.out.println("FROM SERVER: " + modifiedSentence);
+
+
 
             }
 

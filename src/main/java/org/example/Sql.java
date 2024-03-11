@@ -8,7 +8,10 @@ public class Sql {
 
 	private static Connection connect;
 	
-	public static void delete_statement(String id ){
+	public static void deleteStatement(String id ){
+
+		System.out.println("הגעתי");
+		System.out.println(id);
 		
 		String sqldelete = "delete from person where id = ?";
 		
@@ -16,8 +19,6 @@ public class Sql {
 			PreparedStatement pst = connect.prepareStatement(sqldelete);
 			
 			pst.setString(1, id);
-
-			
 			pst.execute();
 			
 			
@@ -28,16 +29,19 @@ public class Sql {
 		
 	}
 	
-	public static void update_statement(){
+	public static void updateStatement(String id,String fullName , String phonNum , String password){
 		
-String sqlupdate = "UPDATE student SET name=?  WHERE id =? ";
-		
+String sqlupdate = "UPDATE person SET fullName=? ,phonNum = ?,password = ? WHERE id =? ";
+
+
 		try {
 			PreparedStatement pst = connect.prepareStatement(sqlupdate);
 			
-			pst.setString(1, "effi");
-			pst.setString(2, "3344");
-		//	pst.setString(3, "66127762");
+			pst.setString(1, fullName );
+			pst.setString(2, phonNum);
+			pst.setString(3, password);
+			pst.setString(4, id);
+
 			
 			pst.executeUpdate();
 			
@@ -49,15 +53,16 @@ String sqlupdate = "UPDATE student SET name=?  WHERE id =? ";
 		
 	}
 	
-	public static void insert_statement( String id , String name , String phone){
+	public static void insertStatement( String id , String name , String phone ,String password){
 		
-		String sqlInsert = "insert into students (idstudents,name, phone) values (?,?,?)";
+		String sqlInsert = "insert into person (id ,fullName, phonNum , password) values (?,?,?,?)";
 		
 		try {
 			PreparedStatement pst = connect.prepareStatement(sqlInsert);
 			pst.setString(1, id);
 			pst.setString(2, name);
 			pst.setString(3, phone);
+			pst.setString(4, password);
 		
 			pst.execute();
 			
@@ -69,27 +74,30 @@ String sqlupdate = "UPDATE student SET name=?  WHERE id =? ";
 		}
 		
 	}
-	
-	public static double select_query()
+
+
+
+	public static String selectQuery(String id)
 	{
 		String str="";
 		try {
-			PreparedStatement statement = connect.prepareStatement("select average(studentsalary) from student ");
+			PreparedStatement statement = connect.prepareStatement("select * from person where id ="+id);
 			
 			ResultSet result = statement.executeQuery();
 			
 			while(result.next())
 			{
 				
-				str += result.getString(1) + result.getString(2);
+				str += result.getString(1) + "*" +result.getString(2) + "*" +result.getString(3)+ "*" +result.getString(4);
 				
 			}
+			System.out.println(str);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return Double.parseDouble(str);
+		return str;
 	}
 	
 	public static void connection()
